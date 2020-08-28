@@ -19,5 +19,3 @@ tokio = { version =  "0.2.11", features = ["full"] }
 
 # for parsing query strings
 serde = "1.0.115"
-serde_derive = "1.0.115"
-serde_json = { version = "1.0", default-features = false, features = ["alloc"] }

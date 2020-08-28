@@ -1,5 +1,5 @@
 use warp::{Filter, reject::Reject};
-use serde_derive::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use crate::{publish, teloxide::create_bot};
 
 #[derive(Deserialize, Serialize)]
