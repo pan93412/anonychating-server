@@ -10,6 +10,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "anonychating_server"
+version = "0.1.0"
+dependencies = [
+ "log 0.4.11",
+ "pretty_env_logger",
+ "serde",
+ "teloxide",
+ "teloxide-macros",
+ "tokio",
+ "warp",
+]
+
+[[package]]
 name = "arc-swap"
 version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1194,19 +1207,6 @@ dependencies = [
  "wasm-bindgen-futures",
  "web-sys",
  "winreg",
-]
-
-[[package]]
-name = "rustblog"
-version = "0.1.0"
-dependencies = [
- "log 0.4.11",
- "pretty_env_logger",
- "serde",
- "teloxide",
- "teloxide-macros",
- "tokio",
- "warp",
 ]
 
 [[package]]

@@ -1,5 +1,5 @@
 [package]
-name = "rustblog"
+name = "anonychating_server"
 version = "0.1.0"
 authors = ["pan93412 <pan93412@gmail.com>"]
 edition = "2018"
