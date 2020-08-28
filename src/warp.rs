@@ -1,6 +1,7 @@
 use crate::{config::Config, log::log_info, publish, teloxide::create_bot, CONFIG_FILENAME};
+use filters::{method, any};
 use serde::Deserialize;
-use warp::{reject::Reject, Filter, Rejection, Reply};
+use warp::{filters, fs, query, reject::Reject, Filter};
 
 #[derive(Deserialize)]
 /// The request to /publish.
@@ -16,13 +17,6 @@ struct PublishRequest {
 struct RequestFailed;
 impl Reject for RequestFailed {}
 
-async fn error_handler(_rejection: Rejection) -> Result<impl Reply, std::convert::Infallible> {
-    Ok(warp::reply::with_status(
-        r#"{"success": false}"#,
-        warp::http::StatusCode::INTERNAL_SERVER_ERROR,
-    ))
-}
-
 pub async fn warp_server() {
     let wc = Config::from_file(CONFIG_FILENAME).warp;
 
@@ -37,16 +31,18 @@ pub async fn warp_server() {
         );
 
         if request.await.is_ok() {
-            Ok(r#"{"success": true}"#)
+            Ok(r#"ok"#)
         } else {
             Err(warp::reject::custom(RequestFailed))
         }
     };
 
     let publish = warp::path!("api" / "publish")
-        .and(warp::query::<PublishRequest>())
-        .and_then(publish_msg_fn)
-        .recover(error_handler);
+        .and(method::get())
+        .and(query::<PublishRequest>())
+        .and_then(publish_msg_fn);
+
+    let static_filter = any::any().and(method::get()).and(fs::dir("static"));
 
     // wc.server_ip
     //  1. 先變成迭代器，以便 map 成字串: iter()
@@ -55,12 +51,9 @@ pub async fn warp_server() {
     //  4. 最後，中間加點點: .join(".")
     log_info(
         "Warp.Main",
-        &format!(
-            "Server is running on \x1b[1mhttp://{}\x1b[0m",
-            wc.to_uri(),
-        ),
+        &format!("Server is running on \x1b[1mhttp://{}\x1b[0m", wc.to_uri(),),
     );
-    warp::serve(publish)
+    warp::serve(publish.or(static_filter))
         .run((wc.server_ip, wc.server_port))
         .await;
 }
