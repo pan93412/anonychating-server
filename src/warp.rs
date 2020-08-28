@@ -29,15 +29,15 @@ pub async fn warp_server() {
         .and(warp::query::<PublishRequest>())
         .and_then(|query: PublishRequest| async move {
             let config = Config::from_file(CONFIG_FILENAME);
+            let bot = create_bot().await;
 
             let request = publish::publish(
-                &create_bot().await,
+                &bot,
                 publish::MessageRequest::new(query.message),
                 config.telexide.publish_channel,
-            )
-            .await;
+            );
 
-            if request.is_ok() {
+            if request.await.is_ok() {
                 Ok(r#"{"success": true}"#)
             } else {
                 Err(warp::reject::custom(RequestFailed))
