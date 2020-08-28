@@ -13,7 +13,6 @@ struct PublishRequest {
 }
 
 #[derive(Debug)]
-/// When the request failed.
 struct RequestFailed;
 impl Reject for RequestFailed {}
 
