@@ -37,7 +37,7 @@ pub async fn warp_server() {
             )
             .await;
 
-            if let Ok(_) = request {
+            if request.is_ok() {
                 Ok(r#"{"success": true}"#)
             } else {
                 Err(warp::reject::custom(RequestFailed))
