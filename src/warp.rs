@@ -25,24 +25,27 @@ async fn error_handler(_rejection: Rejection) -> Result<impl Reply, std::convert
 
 pub async fn warp_server() {
     let wc = Config::from_file(CONFIG_FILENAME).warp;
+
+    let publish_msg_fn = |query: PublishRequest| async move {
+        let config = Config::from_file(CONFIG_FILENAME);
+        let bot = create_bot().await;
+
+        let request = publish::publish(
+            &bot,
+            publish::MessageRequest::new(query.message),
+            config.telexide.publish_channel,
+        );
+
+        if request.await.is_ok() {
+            Ok(r#"{"success": true}"#)
+        } else {
+            Err(warp::reject::custom(RequestFailed))
+        }
+    };
+
     let publish = warp::path!("publish")
         .and(warp::query::<PublishRequest>())
-        .and_then(|query: PublishRequest| async move {
-            let config = Config::from_file(CONFIG_FILENAME);
-            let bot = create_bot().await;
-
-            let request = publish::publish(
-                &bot,
-                publish::MessageRequest::new(query.message),
-                config.telexide.publish_channel,
-            );
-
-            if request.await.is_ok() {
-                Ok(r#"{"success": true}"#)
-            } else {
-                Err(warp::reject::custom(RequestFailed))
-            }
-        })
+        .and_then(publish_msg_fn)
         .recover(error_handler);
 
     // wc.server_ip
