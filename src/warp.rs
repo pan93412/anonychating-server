@@ -43,7 +43,7 @@ pub async fn warp_server() {
         }
     };
 
-    let publish = warp::path!("publish")
+    let publish = warp::path!("api" / "publish")
         .and(warp::query::<PublishRequest>())
         .and_then(publish_msg_fn)
         .recover(error_handler);
