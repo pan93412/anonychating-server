@@ -1,4 +1,7 @@
-use teloxide::{Bot, prelude::{Request, Message}, RequestError};
+use teloxide::{
+    prelude::{Message, Request},
+    Bot, RequestError,
+};
 
 pub struct MessageRequest {
     message_text: String,
@@ -12,11 +15,12 @@ impl MessageRequest {
 }
 
 /// Publish message to @anonychating.
-pub async fn publish(bot: &Bot, message: MessageRequest, publish_to: String) -> Result<Message, RequestError> {
-    let request = bot.send_message(
-        publish_to,
-        message.message_text,
-    );
+pub async fn publish(
+    bot: &Bot,
+    message: MessageRequest,
+    publish_to: String,
+) -> Result<Message, RequestError> {
+    let request = bot.send_message(publish_to, message.message_text);
 
     Ok(request.send().await?)
 }

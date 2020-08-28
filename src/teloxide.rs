@@ -1,5 +1,5 @@
-use teloxide::{BotBuilder, prelude::Request};
-use crate::{config::Config, CONFIG_FILENAME, log::log_info};
+use crate::{config::Config, log::log_info, CONFIG_FILENAME};
+use teloxide::{prelude::Request, BotBuilder};
 
 pub async fn create_bot() -> teloxide::Bot {
     let config = Config::from_file(CONFIG_FILENAME);

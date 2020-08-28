@@ -19,10 +19,7 @@ impl Config {
         let errmsg_of_read_to_string: &str =
             &format!("I can't find the configuration file: {}", filename);
 
-        toml::from_str(
-                &fs::read_to_string(filename)
-                    .expect(errmsg_of_read_to_string)
-            )
+        toml::from_str(&fs::read_to_string(filename).expect(errmsg_of_read_to_string))
             .expect("The configuration file is invaild.")
     }
 }
