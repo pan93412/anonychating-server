@@ -31,7 +31,10 @@ impl Config {
 #[derive(Deserialize)]
 pub struct TelexideConfig {
     /// The token of your Telegram bot.
-    pub bot_token: String
+    pub bot_token: String,
+
+    /// The channel to publish the received message.
+    pub publish_channel: String,
 }
 
 /// The configuration struct of Warp.
