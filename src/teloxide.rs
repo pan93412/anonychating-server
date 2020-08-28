@@ -1,8 +1,5 @@
-use teloxide::prelude::*;
+use teloxide::{BotBuilder};
 
 pub fn create_bot() -> teloxide::Bot {
-    teloxide::enable_logging!();
-    let bot = Bot::from_env();
-    
-    bot
+    BotBuilder::new().token("948437785:AAHYcLhkBj8VBMHpgAdundU_xx45UEjVr-M").build()
 }

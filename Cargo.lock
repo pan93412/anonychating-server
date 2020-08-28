@@ -1202,6 +1202,9 @@ version = "0.1.0"
 dependencies = [
  "log 0.4.11",
  "pretty_env_logger",
+ "serde",
+ "serde_derive",
+ "serde_json",
  "teloxide",
  "teloxide-macros",
  "tokio",
