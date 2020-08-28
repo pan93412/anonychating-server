@@ -1,5 +1,5 @@
 use warp::{Filter, reject::Reject, Rejection, Reply};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use crate::{publish, teloxide::create_bot, config::Config, CONFIG_FILENAME};
 
 #[derive(Deserialize)]
@@ -12,25 +12,14 @@ struct PublishRequest {
     message: String,
 }
 
-#[derive(Serialize)]
-struct PublishResponse {
-    /// Is the request successful?
-    success: bool,
-}
-
 #[derive(Debug)]
 struct RequestFailed;
 impl Reject for RequestFailed {}
 
 async fn error_handler(_rejection: Rejection) -> Result<impl Reply, std::convert::Infallible> {
-    let code = warp::http::StatusCode::INTERNAL_SERVER_ERROR;
-    let response = PublishResponse {
-        success: false,
-    };
-
     Ok(warp::reply::with_status(
-        warp::reply::json(&response),
-        code
+        r#"{"success": false}"#,
+        warp::http::StatusCode::INTERNAL_SERVER_ERROR,
     ))
 }
 
@@ -45,13 +34,9 @@ pub async fn warp_server() {
                 publish::MessageRequest::new(query.message),
                 config.telexide.publish_channel,
             ).await;
-        
-            let response = PublishResponse {
-                success: true,
-            };
 
             if let Ok(_) = request {
-                Ok(warp::reply::json(&response))
+                Ok(r#"{"success": true}"#)
             } else {
                 Err(warp::reject::custom(RequestFailed))
             }
