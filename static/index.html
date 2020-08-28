@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+    <head>
+        <title>AnonyChating - Publish</title>
+        <meta charset="UTF-8">
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="css/button.css">
+        <link rel="stylesheet" href="css/container.css">
+        <link rel="stylesheet" href="css/textarea.css">
+
+        <!-- JS -->
+        <script defer src="js/send.js"></script>
+        <script defer src="js/showStatus.js"></script>
+    </head>
+
+    <body>
+        <div class="container centered">
+            <h2>Discuss anonymously</h2>
+            <h4>Telegram: <a href="https://t.me/anonychating">@anonychating</a></h4>
+            <textarea id='msg' placeholder='What to send...'></textarea>
+            <br>
+            <button id='send-btn'>Send!</button>
+            <p id="status">[Wait]</p>
+        </div>
+    </body>
+
+    <script>
+        const msgbox = document.getElementById('msg');
+        const status = document.getElementById('status');
+
+        document.getElementById('send-btn')
+            .addEventListener('click', async ev => {
+                await setStatus(
+                    status,
+                    await sendMessage(
+                        msgbox.value,
+                    ),
+                );
+            });
+    </script>
+</html>

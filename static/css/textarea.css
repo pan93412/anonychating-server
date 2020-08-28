@@ -1,0 +1,17 @@
+textarea {
+    border: none;
+    border-bottom: 3px solid black;
+    outline: none;
+
+    font-size: 16px;
+
+    transition: all 300ms;
+
+    width: 30em;
+    height: 10em;
+}
+
+textarea:hover,
+textarea:focus {
+    border-bottom: 7px solid black;
+}
