@@ -53,13 +53,8 @@ pub async fn warp_server() {
     log_info(
         "Warp.Main",
         &format!(
-            "Server is running on: {}:{}",
-            wc.server_ip
-                .iter()
-                .map(|v| v.to_string())
-                .collect::<Vec<String>>()
-                .join("."),
-            wc.server_port
+            "Server is running on \x1b[1mhttp://{}\x1b[0m",
+            wc.to_uri(),
         ),
     );
     warp::serve(publish)
