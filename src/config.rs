@@ -42,3 +42,16 @@ pub struct WarpConfig {
     /// The port the user specified.
     pub server_port: u16,
 }
+
+impl WarpConfig {
+    pub fn to_uri(&self) -> String {
+        format!(
+            "{}:{}",
+            self.server_ip.iter()
+                .map(|v| v.to_string())
+                .collect::<Vec<String>>()
+                .join("."),
+            self.server_port,
+        )
+    }
+}
