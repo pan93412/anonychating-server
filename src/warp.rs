@@ -1,6 +1,6 @@
 use warp::{Filter, reject::Reject};
 use serde::{Deserialize, Serialize};
-use crate::{publish, teloxide::create_bot};
+use crate::{publish, teloxide::create_bot, config::Config, CONFIG_FILENAME};
 
 #[derive(Deserialize, Serialize)]
 /// The request to /publish.
@@ -18,12 +18,16 @@ struct RequestFailed;
 impl Reject for RequestFailed {}
 
 pub async fn warp_server() {
-    let publish = warp::path!("publish")
+
+ let publish = warp::path!("publish")
         .and(warp::query::<PublishRequest>())
         .and_then(|query: PublishRequest| async move {
+            let config = Config::from_file(CONFIG_FILENAME);
+
             let request = publish::publish(
                 &create_bot(),
-                publish::MessageRequest::new(query.message)
+                publish::MessageRequest::new(query.message),
+                config.telexide.publish_channel,
             ).await;
         
             match request {
