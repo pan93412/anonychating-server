@@ -42,5 +42,6 @@ pub async fn warp_server() {
             }
         }).recover(error_handler);
 
-    warp::serve(publish).run(([127, 0, 0, 1], 3030)).await;
+    let wc = Config::from_file(CONFIG_FILENAME).warp;
+    warp::serve(publish).run((wc.server_ip, wc.server_port)).await;
 }
