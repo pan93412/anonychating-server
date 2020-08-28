@@ -12,9 +12,9 @@ impl MessageRequest {
 }
 
 /// Publish message to @anonychating.
-pub async fn publish(bot: &Bot, message: MessageRequest) -> Result<Message, RequestError> {
+pub async fn publish(bot: &Bot, message: MessageRequest, publish_to: String) -> Result<Message, RequestError> {
     let request = bot.send_message(
-        String::from("@anonychating"),
+        publish_to,
         message.message_text,
     );
 
